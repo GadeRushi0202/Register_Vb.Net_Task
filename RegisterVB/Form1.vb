@@ -3,6 +3,17 @@
 Public Class Form1
     'Insert Code'
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        If String.IsNullOrWhiteSpace(txtFisrtName.Text) OrElse
+       String.IsNullOrWhiteSpace(txtMiddleName.Text) OrElse
+       String.IsNullOrWhiteSpace(txtLastName.Text) OrElse
+       String.IsNullOrWhiteSpace(txtAddress.Text) OrElse
+       String.IsNullOrWhiteSpace(cmdGender.Text) OrElse
+       String.IsNullOrWhiteSpace(txtPinCode.Text) OrElse
+       String.IsNullOrWhiteSpace(cmdState.Text) Then
+
+            MessageBox.Show("Please fill in all fields before submitting.")
+            Exit Sub ' Exit the subroutine if any field is blank
+        End If
         Dim con As New SqlConnection("Data Source=DESKTOP-NUDMVOB\SQLEXPRESS;Initial Catalog=VbDotNet;Integrated Security=True")
         Dim cmd As New SqlCommand("INSERT INTO Register (FirstName, MiddleName, LastName, Address, Gender, PinCode, State) " &
                               "VALUES (@FirstName, @MiddleName, @LastName, @Address, @Gender, @PinCode, @State)", con)
@@ -19,17 +30,16 @@ Public Class Form1
         Try
             con.Open()
             Dim result As Integer = cmd.ExecuteNonQuery()
-            If result > 0 Then
+            If result >= 1 Then
                 MessageBox.Show("Data inserted successfully.")
 
                 LoadDataIntoDataGridView()
-            Else
-                MessageBox.Show("Data insertion failed.")
             End If
         Catch ex As Exception
             MessageBox.Show("An error occurred: " & ex.Message)
         Finally
             con.Close()
+
         End Try
         LoadDataIntoDataGridView()
     End Sub
